@@ -41,7 +41,8 @@ class ReportService:
 
     def get_cases_near_location(self, latitude, longitude):
         all_cases = CasesLocation.query.all()
-        return compile_cases_near_location(all_cases,latitude,longitude)
+        return compile_cases_near_location(all_cases, latitude, longitude)
+
 
 def compile_cases(data):
     active_cases = sum(
@@ -61,21 +62,22 @@ def compile_cases(data):
         'deaths': deaths
     }
 
-def compile_cases_near_location(data,latitude,longitude):
-    RADIUS = 0.001
 
-    # search for cases within RADIUS
+def compile_cases_near_location(data, latitude, longitude):
+    radius = 0.001
+
+    # search for cases within radius
     cases_nearby = []
     for case in data:
-        if ((case.latitude<float(latitude)+RADIUS and case.latitude>float(latitude)-RADIUS)
-            and (case.longitude<float(longitude)+RADIUS and case.longitude>float(longitude)-RADIUS)):
+        if ((case.latitude < float(latitude)+radius and case.latitude > float(latitude)-radius)
+            and (case.longitude < float(longitude)+radius and case.longitude > float(longitude)-radius)):
             cases_nearby.append(case)
 
-    all_cases = [   {
+    all_cases = [{
                     'status': case.status,
-                    'location':{
-                        'latitude':case.latitude,
-                        'longitude':case.longitude
+                    'location': {
+                        'latitude': case.latitude,
+                        'longitude': case.longitude
                         }
                     }
                     for case in cases_nearby]
