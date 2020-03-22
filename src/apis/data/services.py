@@ -1,5 +1,6 @@
 from models import City,CasesLocation
 from sqlalchemy.sql import or_
+from flask import jsonify
 
 class ReportService():
 
@@ -35,9 +36,9 @@ class ReportService():
         return compileCases(citySituation)
     
     def getCasesNearLocation(self, latitude, longitude):
-        todos_casos = CasesLocation.query.all()
+        cases = CasesLocation.query.all()
 
-        return compileCasesNearLocation(todos_casos)
+        return compileCasesNearLocation(cases,latitude,longitude)
 
 def compileCases(data):
     activeCases = sum([(city.total_cases - city.suspects - city.refuses -
@@ -55,17 +56,23 @@ def compileCases(data):
         'deaths': deaths
     }
 
-def compileCasesNearLocation(data):
-    activeCases = 0
-    suspectedCases = 0
-    recoveredCases = 0
-    deaths = 0
+def compileCasesNearLocation(data,latitude,longitude):
+    RADIUS = 0.001
 
+    # search for cases within RADIUS
+    cases_nearby = []
     for case in data:
-        return {
-            'status': case.status,
-            'location':{
-                'latitude':case.longitude,
-                'longitude':case.latitude
-            }
-        }
+        if ((case.latitude<float(latitude)+RADIUS and case.latitude>float(latitude)-RADIUS)
+            and (case.longitude<float(longitude)+RADIUS and case.longitude>float(longitude)-RADIUS)):
+            cases_nearby.append(case)
+
+    all_cases = [   {
+                    'status': case.status,
+                    'location':{
+                        'latitude':case.latitude,
+                        'longitude':case.longitude
+                        }
+                    }
+                    for case in cases_nearby]
+
+    return jsonify(all_cases)

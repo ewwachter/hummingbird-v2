@@ -186,6 +186,23 @@ class TestDataApi(TestCase):
         data = json.loads(resp.get_data(as_text=True))
         print("response:",data)
 
+        assert len(data) == 3
+        case1 = data[0]
+        case2 = data[1]
+        case3 = data[2]
+
+        assert case1['status'] == "ACTIVE"
+        assert case2['status'] == "SUSPECTED"
+        assert case3['status'] == "RECOVERED"
+
+        resp = self.client.get('/data_api/v1/data/cases_location?lat=-20.047582&lng=-47.780110')
+        data = json.loads(resp.get_data(as_text=True))
+        print("response:",data)
+
+        assert len(data) == 1
+        case1 = data[0]
+
+        assert case1['status'] == "RECOVERED"
 
 
 
