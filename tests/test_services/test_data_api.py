@@ -1,8 +1,6 @@
-import datetime
 import json
 from unittest import TestCase
 from app import app, db
-from mock import patch
 from models import City,CasesLocation
 from tests.runner import clear_db
 
@@ -184,7 +182,6 @@ class TestDataApi(TestCase):
 
         resp = self.client.get('/data_api/v1/data/cases_location?lat=-29.974343&lng=-51.195532')
         data = json.loads(resp.get_data(as_text=True))
-        print("response:",data)
 
         assert len(data) == 3
         case1 = data[0]
@@ -197,7 +194,6 @@ class TestDataApi(TestCase):
 
         resp = self.client.get('/data_api/v1/data/cases_location?lat=-20.047582&lng=-47.780110')
         data = json.loads(resp.get_data(as_text=True))
-        print("response:",data)
 
         assert len(data) == 1
         case1 = data[0]
