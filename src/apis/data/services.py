@@ -69,17 +69,19 @@ def compile_cases_near_location(data, latitude, longitude):
     # search for cases within radius
     cases_nearby = []
     for case in data:
-        if ((case.latitude < float(latitude)+radius and case.latitude > float(latitude)-radius)
-            and (case.longitude < float(longitude)+radius and case.longitude > float(longitude)-radius)):
+        if ((case.latitude < float(latitude)+radius
+            and case.latitude > float(latitude)-radius)
+            and (case.longitude < float(longitude)+radius
+                and case.longitude > float(longitude)-radius)):
             cases_nearby.append(case)
 
     all_cases = [{
-                    'status': case.status,
-                    'location': {
-                        'latitude': case.latitude,
-                        'longitude': case.longitude
-                        }
+                'status': case.status,
+                'location': {
+                    'latitude': case.latitude,
+                    'longitude': case.longitude
                     }
+                }
                     for case in cases_nearby]
 
     return jsonify(all_cases)
