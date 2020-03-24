@@ -1,4 +1,7 @@
 # Hummingbird V2
+![Python Tests](https://github.com/CovidZero/hummingbird-v2/workflows/Python%20Tests/badge.svg)
+![Python Code Style Enforcement](https://github.com/CovidZero/hummingbird-v2/workflows/Python%20Code%20Style%20Enforcement/badge.svg)
+![Auto Assign](https://github.com/CovidZero/hummingbird-v2/workflows/Auto%20Assign/badge.svg)
 
 
 ## Project Resources
@@ -55,7 +58,7 @@ ___
 export FLASK_APP=src/main.py
 export FLASK_ENV=development
 flask db init --directory=local_migrations
-flask db migrate --directory=local_migrations
+flask db migrate --directory=../local_migrations
 flask db upgrade --directory=local_migrations   
 ```
 
@@ -72,4 +75,28 @@ python tests/runner.py
 ___
 ```
 flake8 src
+```
+
+
+## Setup Docker
+
+#### Start your environment using docker
+___
+```
+docker-compose up
+```
+
+#### Configure database to develop
+
+___
+```
+$ docker exec -it api /bin/bash
+
+export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+export FLASK_APP=src/main.py
+export FLASK_ENV=development
+flask db init --directory=local_migrations
+flask db migrate --directory=../local_migrations
+flask db upgrade --directory=local_migrations  
+
 ```
